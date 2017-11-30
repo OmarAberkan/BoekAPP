@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.example.omar.apvalley.ChooseActivity">
+    <ImageView android:src="@drawable/logo"
+        android:layout_width="wrap_content"
+        android:layout_height="144dp"
+        android:layout_marginBottom="24dp"
+        android:layout_gravity="center_horizontal" />
+    <Spinner
+        android:id="@+id/campus"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="24dp"
+        android:entries="@array/scholen_array" />
+        android:padding="12dp"
+        />
+    <Spinner
+        android:id="@+id/richting"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="24dp"
+        android:entries="@array/richtingen_array" />
+        android:padding="12dp"
+        />
+
+    <Spinner
+        android:id="@+id/klas"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:entries="@array/klas_array" />
+        android:layout_marginBottom="24dp"
+        android:padding="12dp"
+        />
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/zoekButton"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="24dp"
+        android:padding="12dp"
+        android:text="Zoeken"/>
+
+</LinearLayout>

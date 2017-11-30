@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "549535941405",
+    "firebase_url": "https://boekapp-5f29b.firebaseio.com",
+    "project_id": "boekapp-5f29b",
+    "storage_bucket": "boekapp-5f29b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:549535941405:android:964d73e89e7b3c22",
+        "android_client_info": {
+          "package_name": "com.example.omar.apvalley"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "549535941405-u1v4romks24qbimjgkl8eceb4btkqaor.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDqrAQEkEHayUyzoqNPMvxX30wDrzp9CBo"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

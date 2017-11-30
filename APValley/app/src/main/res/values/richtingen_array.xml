@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="richtingen_array">
+        <item>Elektronica-ICT</item>
+        <item>Biomedische Laboratoriumtechnologie</item>
+        <item>Chemie</item>
+        <item>Elektromechanica</item>
+        <item>Energiemanegment</item>
+        <item>Grafische en Digitale Media</item>
+        <item>Integrale veiligheid</item>
+        <item>Vastgoed - Landmeten</item>
+        <item>Vastgoed - Makelaardij</item>
+        <item>Voedings- en Dieetkunde</item>
+    </string-array>
+</resources>
