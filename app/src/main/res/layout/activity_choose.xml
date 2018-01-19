@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="350dp"
+    android:orientation="vertical"
+    android:layout_gravity="center_vertical"
+    android:backgroundTint="#EEE5E6"
+    tools:context="com.example.omar.apvalley.ChooseActivity">
+
+    <Spinner
+        android:id="@+id/campus"
+        android:layout_width="301dp"
+        android:layout_height="45dp"
+        android:layout_marginBottom="12dp"
+        android:layout_marginTop="12dp"
+        android:layout_gravity="center"
+        android:text="Kies het departement"
+        android:background="@drawable/dropdown"
+        android:entries="@array/scholen_array"
+        android:spinnerMode="dialog"
+        android:textAlignment="center" /><![CDATA[
+        android:padding="12dp"
+        />
+
+    ]]>
+
+    <Spinner
+        android:id="@+id/richting"
+        android:layout_width="301dp"
+        android:layout_height="45dp"
+        android:layout_marginBottom="12dp"
+        android:layout_marginTop="12dp"
+        android:layout_gravity="center"
+        android:text="Kies het departement"
+        android:background="@drawable/dropdown"
+        android:entries="@array/richtingen_array"
+        android:spinnerMode="dialog"
+        android:textAlignment="center"/>
+
+    <Spinner
+        android:id="@+id/klas"
+        android:layout_width="301dp"
+        android:layout_height="45dp"
+        android:layout_marginBottom="12dp"
+        android:layout_marginTop="12dp"
+        android:layout_gravity="center"
+        android:text="Kies het departement"
+        android:background="@drawable/dropdown"
+        android:entries="@array/klas_array"
+        android:spinnerMode="dialog"
+        android:textAlignment="center"/>
+
+        />
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/zoekButton"
+        android:layout_width="300dp"
+        android:layout_height="45dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="24dp"
+        android:background="@drawable/zoekknop_long"
+
+        />
+
+</LinearLayout>

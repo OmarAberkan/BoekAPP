@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="klas_array">
+        <item>Kies uw klas</item>
+        <item>1EA</item>
+        <item>2EA</item>
+        <item>3EA</item>
+
+
+    </string-array>
+</resources>
