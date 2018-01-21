@@ -1,29 +1,22 @@
 package com.example.omar.apvalley;
 
-import android.app.NotificationManager;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.NotificationCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,40 +32,39 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Locale;
-import java.util.stream.IntStream;
 
-public class CartActivity extends FragmentActivity {
+
+/**
+ * A simple {@link Fragment} subclass.
+ */
+public class HistoriekFragment extends Fragment {
+
     private RecyclerView mRecyclerView;
     //private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
-    private FirebaseAuth mAuth;
-
-    private static final String TAG = "PostDetailActivity";
-
     DatabaseReference dref;
-
     ArrayList<String> arraytje;
     ArrayList<Boeken> list = new ArrayList<>(0);
-
-
+    ArrayAdapter<Boeken> adapter;
+    private FirebaseAuth mAuth;
     private MyAdapter mAdapter;
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_cart);
-            arraytje= new ArrayList<String>();
+    public HistoriekFragment() {
+        // Required empty public constructor
+    }
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View v=inflater.inflate(R.layout.fragment_historiek, container, false);
+
+        arraytje= new ArrayList<String>();
+
+        mRecyclerView = (RecyclerView) v.findViewById(R.id.recyclerView);
         mAuth = FirebaseAuth.getInstance();
         dref = FirebaseDatabase.getInstance().getReference().child("User").child(FirebaseAuth.getInstance().getUid())
-                .child("Winkelmandje");
-        ((Button) findViewById(R.id.button3)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intenje = new Intent(getApplicationContext(),BetaalActivity.class);
-                startActivity(intenje);
-            }
-        });
+                .child("Bestelhistoriek");
 
         dref.addChildEventListener(new ChildEventListener() {
             @Override
@@ -81,25 +73,11 @@ public class CartActivity extends FragmentActivity {
                 Boeken message = dataSnapshot.getValue(Boeken.class);
 
                 list.add(message);
-                Toast.makeText(CartActivity.this, Integer.toString( list.size()), Toast.LENGTH_SHORT).show();
-
-
-
-                double sum = 0;
-                for(int i=0;i<list.size();i++){
-
-
-
-                        sum +=  list.get(i).prijs;
+                // The SharedPreferences editor - must use commit() to submit changes
 
 
 
 
-
-
-                }
-
-                ((TextView) findViewById(R.id.textView3)).setText("Totale bedrag:"+ Double.toString(sum));
 
                 // ArrayList<Boeken> beerDrinkers = list.stream()
                 //       .filter(p -> p.titel() == "klakele").collect(Collectors.toList());
@@ -124,9 +102,7 @@ public class CartActivity extends FragmentActivity {
                 while (it.hasNext()) {
                     Boeken user = it.next();
                     if (user.titel.equals(dataSnapshot.getKey())) {
-                        Toast.makeText(getApplicationContext(),
-                                it.toString(),
-                                Toast.LENGTH_SHORT).show();
+
                         it.remove();
                         mRecyclerView.getAdapter().notifyDataSetChanged();
                     }
@@ -149,33 +125,41 @@ public class CartActivity extends FragmentActivity {
         });
 
         mRecyclerView.setHasFixedSize(true);
-        mLayoutManager = new LinearLayoutManager(this);
+        mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mAdapter = new MyAdapter(list,getApplicationContext());
+        mAdapter = new MyAdapter(list,getActivity());
 
         mRecyclerView.setAdapter(mAdapter);
 
 
 
+
+                return v;
     }
-    public class MyAdapter extends RecyclerView.Adapter<CartActivity.MyAdapter.ViewHolder> implements Filterable {
+    public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> implements Filterable {
         private ArrayList<Boeken> mDataset;
         private ArrayList<Boeken> mFilteredList;
         private Context mCtx;
 
         public class ViewHolder extends RecyclerView.ViewHolder {
-            public TextView mTextView;
+            public TextView auteur;
             public TextView titel;
+            public TextView ISBN;
             public ImageView mImageView;
             public ImageView overflow;
+            public TextView prijs;
+
 
 
             public ViewHolder(View itemView) {
                 super(itemView);
                 titel = (TextView) itemView.findViewById(R.id.textView7);
-                mTextView = (TextView) itemView.findViewById(R.id.titel);
+                auteur = (TextView) itemView.findViewById(R.id.textView5);
+                ISBN =(TextView) itemView.findViewById(R.id.textView6);
                 mImageView = (ImageView) itemView.findViewById(R.id.imageView);
                 overflow = (ImageView) itemView.findViewById(R.id.overflow);
+                prijs=(TextView) itemView.findViewById(R.id.textView9);
+
                 itemView.setTag(itemView);
 
             }
@@ -191,10 +175,10 @@ public class CartActivity extends FragmentActivity {
         // Create new views (invoked by the layout manager)
         @Override
         public MyAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
-                                                                        int viewType) {
+                                                                         int viewType) {
             // create a new view
             View v = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.cart_list, parent, false);
+                    .inflate(R.layout.historiek_list, parent, false);
             // set the view's size, margins, paddings and layout parameters
 
             ViewHolder vh = new ViewHolder(v);
@@ -206,72 +190,12 @@ public class CartActivity extends FragmentActivity {
         public void onBindViewHolder(final MyAdapter.ViewHolder holder, final int position) {
             // - get element from your dataset at this position
             // - replace the contents of the view with that element
-            holder.mTextView.setText(mFilteredList.get(position).prijs.toString()+"€");
             holder.titel.setText(mFilteredList.get(position).titel);
-            holder.mImageView.setOnClickListener(new View.OnClickListener() {
-                                                     @Override
-                                                     public void onClick(View view) {
-                                                         Intent intenje = new Intent(mCtx,BestelActivity.class);
-                                                         intenje.putExtra("titel",mFilteredList.get(position).titel);
-                                                         intenje.putExtra("auteur",mFilteredList.get(position).auteur);
-                                                         intenje.putExtra("uitgeverij",mFilteredList.get(position).datum);
-                                                         intenje.putExtra("isbn",mFilteredList.get(position).ISBN);
-                                                         intenje.putExtra("foto",mFilteredList.get(position).foto);
-                                                         intenje.putExtra("richting",mFilteredList.get(position).richting);
-                                                         intenje.putExtra("prijs",mFilteredList.get(position).prijs.toString());
-                                                         intenje.putExtra("datum",mFilteredList.get(position).uitgeverij);
-                                                         intenje.putExtra("klas",mFilteredList.get(position).klas);
-                                                         intenje.putExtra("departement",mFilteredList.get(position).departement);
+            holder.auteur.setText("door "+mFilteredList.get(position).auteur);
+            holder.ISBN.setText("ISBN: "+mFilteredList.get(0).ISBN);
+            holder.prijs.setText(mFilteredList.get(position).prijs.toString()+"€");
+            Picasso.with(mCtx).load(mFilteredList.get(position).foto).into(holder.mImageView);
 
-
-                                                         startActivity(intenje);
-                                                     }
-            });
-
-            Picasso.with(getApplicationContext()).load(mFilteredList.get(position).foto).into(holder.mImageView);
-            holder.overflow.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    final PopupMenu popup = new PopupMenu(mCtx, holder.overflow);
-                    popup.getMenuInflater().inflate(R.menu.menu_cart, popup.getMenu());
-
-                    //adding click listener
-                    popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                        @Override
-                        public boolean onMenuItemClick(MenuItem item) {
-                            switch (item.getItemId()) {
-                                case R.id.action_add_favourite:
-                                    Toast.makeText(mCtx, "Verwijderd uit winkelmandje", Toast.LENGTH_LONG).show();
-                                    FirebaseDatabase.getInstance().getReference().child("User").child(FirebaseAuth.getInstance().getUid())
-                                        .child("Winkelmandje").child(mFilteredList.get(position).titel).removeValue();
-
-                                    return true;
-                                case R.id.action_play_next:
-                                    Intent intenje = new Intent(mCtx,BestelActivity.class);
-                                    intenje.putExtra("titel",mFilteredList.get(position).titel);
-                                    intenje.putExtra("auteur",mFilteredList.get(position).auteur);
-                                    intenje.putExtra("uitgeverij",mFilteredList.get(position).datum);
-                                    intenje.putExtra("isbn",mFilteredList.get(position).ISBN);
-                                    intenje.putExtra("foto",mFilteredList.get(position).foto);
-                                    intenje.putExtra("richting",mFilteredList.get(position).richting);
-                                    intenje.putExtra("prijs",mFilteredList.get(position).prijs.toString());
-                                    intenje.putExtra("datum",mFilteredList.get(position).uitgeverij);
-                                    intenje.putExtra("klas",mFilteredList.get(position).klas);
-                                    intenje.putExtra("departement",mFilteredList.get(position).departement);
-
-
-                                    startActivity(intenje);
-
-                                    return true;
-                                default:
-                            }
-                            return false;
-                        }
-                    });
-                    //displaying the popup
-                    popup.show();
-                }
-            });
         }
 
         // Return the size of your dataset (invoked by the layout manager)

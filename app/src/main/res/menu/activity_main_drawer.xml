@@ -14,7 +14,7 @@
         <item
             android:id="@+id/nav_camera"
             android:icon="@drawable/ic_menu_camera"
-            android:title="Verkopen"
+            android:title="Mijn boeken"
             android:enabled="true"
             app:showAsAction="ifRoom"
             />
@@ -23,6 +23,13 @@
             android:id="@+id/nav_slideshnw"
             android:icon="@drawable/ic_shopping_cart_white_24dp"
             android:title="Winkelmandje"
+            android:enabled="true"
+            app:showAsAction="ifRoom"
+            />
+        <item
+            android:id="@+id/history"
+            android:icon="@drawable/ic_history_black_18dp"
+            android:title="Bestelhistoriek"
             android:enabled="true"
             app:showAsAction="ifRoom"
             />

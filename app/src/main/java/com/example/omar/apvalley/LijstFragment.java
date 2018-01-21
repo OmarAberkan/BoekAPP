@@ -1,13 +1,14 @@
 package com.example.omar.apvalley;
 
+
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -35,60 +36,46 @@ import java.util.Iterator;
 import java.util.Locale;
 
 
-public class WinkelmandjeFragment extends Fragment {
-    private RecyclerView.LayoutManager mLayoutManager;
-
+/**
+ * A simple {@link Fragment} subclass.
+ */
+public class LijstFragment extends Fragment {
     private RecyclerView mRecyclerView;
-
-    DatabaseReference dref;
-
-    ArrayList<String> arraytje;
     ArrayList<Boeken> list = new ArrayList<>(0);
+    private RecyclerView.LayoutManager mLayoutManager;
+    DatabaseReference dref;
     private MyAdapter mAdapter;
-    private FirebaseAuth mAuth;
-public  WinkelmandjeFragment(){
+    public LijstFragment() {
+        // Required empty public constructor
+    }
 
-}
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        final View v=inflater.inflate(R.layout.fragment_winkelmandje, container, false);
+        View v =inflater.inflate(R.layout.fragment_lijst, container, false);
+
+
+
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            String titel = bundle.getString("titel", "");
+            dref = FirebaseDatabase.getInstance().getReference().child("Boeken").child("Afzonderlijk").child("Boeken").child(titel).child("userID");
+        }
 
         mRecyclerView = (RecyclerView) v.findViewById(R.id.recyclerView);
-        mAuth = FirebaseAuth.getInstance();
-        dref = FirebaseDatabase.getInstance().getReference().child("User").child(FirebaseAuth.getInstance().getUid())
-                .child("Winkelmandje");
+
 
         dref.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 // for (DataSnapshot messageSnapshot : dataSnapshot.getChildren()) {
                 Boeken message = dataSnapshot.getValue(Boeken.class);
-
                 list.add(message);
-//                Toast.makeText(getActivity(), Integer.toString( list.size()), Toast.LENGTH_SHORT).show();
 
-
-
-                double sum = 0;
-                for(int i=0;i<list.size();i++){
-
-
-
-                    sum +=  list.get(i).prijs;
-
-
-
-
-
-
-                }
-
-                ((TextView) v.findViewById(R.id.textView4)).setText(Double.toString(sum)+"€");
-
+                // Toast.makeText(ListActivity.this, "lijstje"+lijstje.get(0).titel, Toast.LENGTH_SHORT).show();
                 // ArrayList<Boeken> beerDrinkers = list.stream()
                 //       .filter(p -> p.titel() == "klakele").collect(Collectors.toList());
-
 
 
                 mRecyclerView.getAdapter().notifyDataSetChanged();
@@ -100,22 +87,37 @@ public  WinkelmandjeFragment(){
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
 
+                Toast.makeText(getActivity(), "Veranderd", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
 
 
-               Iterator<Boeken> it = list.iterator();
+                Iterator<Boeken> it = list.iterator();
                 while (it.hasNext()) {
                     Boeken user = it.next();
-
-                    if (user.titel.equals(dataSnapshot.getKey())) {
-
+                    if (user.richting.equals(dataSnapshot.getKey())) {
+                        Toast.makeText(getActivity(),
+                                it.toString(),
+                                Toast.LENGTH_SHORT).show();
                         it.remove();
                         mRecyclerView.getAdapter().notifyDataSetChanged();
                     }
                 }
+
+                //      Boeken message = dataSnapshot.getValue(Boeken.class);
+
+                //    list.add(message);
+
+                // ArrayList<Boeken> beerDrinkers = list.stream()
+                //       .filter(p -> p.titel() == "klakele").collect(Collectors.toList());
+
+
+                //   mRecyclerView.getAdapter().notifyDataSetChanged();
+
+
+
 
 
                 //   list.re(dataSnapshot.getValue(Boeken.class));
@@ -132,28 +134,13 @@ public  WinkelmandjeFragment(){
 
             }
         });
+
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
         mAdapter = new MyAdapter(list,getActivity());
 
         mRecyclerView.setAdapter(mAdapter);
-
-
-        ((Button) v.findViewById(R.id.button3)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Fragment fragment = new AfrekenenFragment();
-                Bundle bundle = new Bundle();
-                bundle.putString("prijs",((TextView) v.findViewById(R.id.textView4)).getText().toString());
-                fragment.setArguments(bundle);
-                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.frame, fragment);
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
-            }
-        });
 
 
         return v;
@@ -164,23 +151,16 @@ public  WinkelmandjeFragment(){
         private Context mCtx;
 
         public class ViewHolder extends RecyclerView.ViewHolder {
-            public TextView auteur;
-            public TextView titel;
-            public TextView ISBN;
-            public ImageView mImageView;
-            public ImageView overflow;
+            public TextView username;
             public TextView prijs;
-            public ImageView verwijder;
+            public Button koop;
+
 
             public ViewHolder(View itemView) {
                 super(itemView);
-                titel = (TextView) itemView.findViewById(R.id.textView7);
-                auteur = (TextView) itemView.findViewById(R.id.textView5);
-                ISBN =(TextView) itemView.findViewById(R.id.textView6);
-                mImageView = (ImageView) itemView.findViewById(R.id.imageView);
-                overflow = (ImageView) itemView.findViewById(R.id.overflow);
-                prijs=(TextView) itemView.findViewById(R.id.textView9);
-                verwijder= (ImageView) itemView.findViewById(R.id.verwijder);
+                username = (TextView) itemView.findViewById(R.id.username);
+                prijs = (TextView) itemView.findViewById(R.id.prijs);
+                koop = (Button) itemView.findViewById(R.id.koop);
                 itemView.setTag(itemView);
 
             }
@@ -199,29 +179,36 @@ public  WinkelmandjeFragment(){
                                                                     int viewType) {
             // create a new view
             View v = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.winkelmandje_list, parent, false);
+                    .inflate(R.layout.list_item, parent, false);
             // set the view's size, margins, paddings and layout parameters
 
             ViewHolder vh = new ViewHolder(v);
             return vh;
         }
-
+        //  mDatabase.child(campus).child(richting).child(((Spinner) findViewById(R.id.klas)).getSelectedItem().toString()).child(titel.replace('.','_')).child("userId").child(FirebaseAuth.getInstance().getUid()).setValue(boek);
         // Replace the contents of a view (invoked by the layout manager)
         @Override
-        public void onBindViewHolder(final MyAdapter.ViewHolder holder, final int position) {
+        public void onBindViewHolder(final ViewHolder holder, final int position) {
             // - get element from your dataset at this position
-            // - replace the contents of the view with that
-            holder.titel.setText(mFilteredList.get(position).titel);
-            holder.auteur.setText("door "+mFilteredList.get(position).auteur);
-            holder.ISBN.setText("ISBN: "+mFilteredList.get(0).ISBN);
+            // - replace the contents of the view with that element
+            //       holder.mTextView.setText(mFilteredList.get(position).prijs.toString()+"€");
+            holder.username.setText(mFilteredList.get(position).username);
             holder.prijs.setText(mFilteredList.get(position).prijs.toString()+"€");
-            holder.verwijder.setOnClickListener(new View.OnClickListener() {
+
+            holder.koop.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    FirebaseDatabase.getInstance().getReference().child("User").child(FirebaseAuth.getInstance().getUid()).child("Winkelmandje").child(mFilteredList.get(position).titel).removeValue();
+                    FirebaseDatabase.getInstance().getReference().child("User").child(FirebaseAuth.getInstance().getUid()).child("Winkelmandje").child(mFilteredList.get(position).titel).setValue(mFilteredList.get(position));
+                    Toast.makeText(mCtx, "Toegevoegd aan winkelmandje", Toast.LENGTH_SHORT).show();
+                    Fragment fragment = new AfzonderlijkFragment();
+                    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    fragmentTransaction.replace(R.id.frame, fragment);
+                    fragmentTransaction.addToBackStack(null);
+                    fragmentTransaction.commit();
+
                 }
             });
-            Picasso.with(mCtx).load(mFilteredList.get(position).foto).into(holder.mImageView);
 
         }
 
@@ -271,7 +258,7 @@ public  WinkelmandjeFragment(){
 
                         for (Boeken boekenlijst : mDataset) {
 
-                            if (boekenlijst.titel.toLowerCase().contains(charString) || boekenlijst.ISBN.toLowerCase().contains(charString)   ) {
+                            if (boekenlijst.richting.toLowerCase().contains(charString)   ) {
 
                                 filteredList.add(boekenlijst);
                             }
@@ -293,6 +280,5 @@ public  WinkelmandjeFragment(){
             };
         }
     }
-
 
 }

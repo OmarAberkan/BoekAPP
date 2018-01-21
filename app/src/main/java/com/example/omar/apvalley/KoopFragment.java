@@ -6,11 +6,15 @@ import android.content.res.Resources;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +27,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -64,7 +72,8 @@ public class KoopFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+
+
         View v = inflater.inflate(R.layout.fragment_koop, container, false);
         mDatabase = FirebaseDatabase.getInstance().getReference();
         mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -72,9 +81,9 @@ public class KoopFragment extends Fragment {
 
 
 
+        Toast.makeText(getActivity(),   FirebaseAuth.getInstance().getCurrentUser().getDisplayName(), Toast.LENGTH_SHORT).show();
 
-        dref = FirebaseDatabase.getInstance().getReference().child("Wetenschap en Techniek")
-                .child("Elektronica-ICT").child("1EA");
+        dref = FirebaseDatabase.getInstance().getReference().child("Boeken");
 
         dref.addChildEventListener(new ChildEventListener() {
             @Override
@@ -85,6 +94,7 @@ public class KoopFragment extends Fragment {
                 Boeken message = new Boeken();
 //                message.ISBN=dataSnapshot.child("ISBN").getValue().toString();
                 //              message.datum=dataSnapshot.child("datum").getValue().toString();
+
                 message.foto=dataSnapshot.child("foto").getValue().toString();
                 message.titel=dataSnapshot.child("titel").getValue().toString();
                 //   message.uitgeverij=dataSnapshot.child("uitgeverij").getValue().toString();
@@ -162,14 +172,14 @@ public class KoopFragment extends Fragment {
             // each data item is just a string in this case
 
             public ImageView mImageView;
-            public TextView mPrijs;
+           // public TextView mPrijs;
             public TextView mTextView;
             public ViewHolder(View itemView) {
                 super(itemView);
 
                 mImageView = (ImageView) itemView.findViewById(R.id.imageView);
                 mTextView = (TextView) itemView.findViewById(R.id.titel);
-                mPrijs= (TextView) itemView.findViewById(R.id.price);
+              //  mPrijs= (TextView) itemView.findViewById(R.id.price);
                 itemView.setTag(itemView);
 
             }
@@ -202,29 +212,33 @@ public class KoopFragment extends Fragment {
             // - replace the contents of the view with that element
             holder.mTextView.setText(mFilteredList.get(position).titel);
 
-           if(mFilteredList.get(position).prijs !=null)
-               holder.mPrijs.setText(mFilteredList.get(position).prijs.toString());
+         //  if(mFilteredList.get(position).prijs !=null)
+           //    holder.mPrijs.setText(mFilteredList.get(position).prijs.toString());
 
             Picasso.with(getActivity()).load(mFilteredList.get(position).foto).into(holder.mImageView);
             holder.mImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
 
-
-                    Intent intenje = new Intent(mCtx,ListActivity.class);
-                    intenje.putExtra("titel",mFilteredList.get(position).titel);
-                    intenje.putExtra("auteur",mFilteredList.get(position).auteur);
-                    intenje.putExtra("uitgeverij",mFilteredList.get(position).datum);
-                    intenje.putExtra("isbn",mFilteredList.get(position).ISBN);
-                    intenje.putExtra("foto",mFilteredList.get(position).foto);
-                    intenje.putExtra("richting",mFilteredList.get(position).richting);
+                    Fragment fragment = new AfzonderlijkFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putString("titel",mFilteredList.get(position).titel);
+                    bundle.putString("auteur",mFilteredList.get(position).auteur);
+                    bundle.putString("uitgeverij",mFilteredList.get(position).datum);
+                    bundle.putString("isbn",mFilteredList.get(position).ISBN);
+                    bundle.putString("foto",mFilteredList.get(position).foto);
+                    bundle.putString("richting",mFilteredList.get(position).richting);
                     // intenje.putExtra("prijs",mFilteredList.get(position).prijs.toString());
-                    intenje.putExtra("datum",mFilteredList.get(position).uitgeverij);
-                    intenje.putExtra("klas",mFilteredList.get(position).klas);
-                    intenje.putExtra("departement",mFilteredList.get(position).departement);
+                    bundle.putString("datum",mFilteredList.get(position).uitgeverij);
+                    bundle.putString("klas",mFilteredList.get(position).klas);
+                    bundle.putString("departement",mFilteredList.get(position).departement);
+                    fragment.setArguments(bundle);
+                    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    fragmentTransaction.replace(R.id.frame, fragment);
+                    fragmentTransaction.addToBackStack(null);
+                    fragmentTransaction.commit();
 
-
-                    startActivity(intenje);
 
                 }
             });
@@ -351,4 +365,5 @@ public class KoopFragment extends Fragment {
 
         mDatabase.child("User").child(id).child("Winkelmandje").setValue(boek);
     }
+
 }

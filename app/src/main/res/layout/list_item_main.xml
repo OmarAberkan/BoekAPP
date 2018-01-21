@@ -28,6 +28,7 @@
                 android:id="@+id/imageView"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/album_cover_height"
+                android:layout_marginTop="10dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:clickable="true"
                 android:scaleType="fitXY" />
@@ -42,20 +43,7 @@
                 android:paddingRight="@dimen/album_title_padding"
                 android:paddingTop="@dimen/album_title_padding"
                 android:textColor="#111"
-                android:textSize="11dp" />
-
-
-            <TextView
-                android:id="@+id/price"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/titel"
-                android:layout_marginRight="10dp"
-                android:gravity="right"
-                android:paddingBottom="@dimen/songs_count_padding_bottom"
-                android:textColor="@color/colorAccent"
-                android:textSize="11dp" />
-
+                android:textSize="13dp" />
 
 
         </RelativeLayout>

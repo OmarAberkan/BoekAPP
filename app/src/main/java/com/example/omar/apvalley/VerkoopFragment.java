@@ -55,6 +55,7 @@ public class VerkoopFragment extends Fragment {
     public RecyclerView mRecyclerView;
     public MyAdapter mAdapter;
     private static final int REQUEST_CODE_PICKER=2000;
+     Button b;
     String json = "{\n" +
             " \"kind\": \"books#volumes\",\n" +
             " \"totalItems\": 0\n" +
@@ -68,11 +69,14 @@ public class VerkoopFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        FirebaseDatabase.getInstance().getReference().child("User").child(FirebaseAuth.getInstance().getUid()).child("Verkoop").removeValue();
        final   View v = inflater.inflate(R.layout.fragment_verkoop, container, false);
+
         mDatabase = FirebaseDatabase.getInstance().getReference();
         // Toast.makeText(getApplicationContext(),mAuth.getUid(), Toast.LENGTH_LONG).show();
 
 viewtje=v;
+        b=(Button) v.findViewById(R.id.verkopen);
         mRecyclerView = (RecyclerView) v.findViewById(R.id.recyclerView1);
 
 
@@ -147,15 +151,15 @@ viewtje=v;
                 Toast.makeText(getActivity(), "Boek toegevoegd", Toast.LENGTH_SHORT).show();
                 Boeken message = new Boeken();
                 message.ISBN=dataSnapshot.child("ISBN").getValue().toString();
-                message.datum=dataSnapshot.child("datum").getValue().toString();
+  //            message.datum=dataSnapshot.child("datum").getValue().toString();
                 message.foto=dataSnapshot.child("foto").getValue().toString();
                 message.titel=dataSnapshot.child("titel").getValue().toString();
-                message.uitgeverij=dataSnapshot.child("uitgeverij").getValue().toString();
+//                message.uitgeverij=dataSnapshot.child("uitgeverij").getValue().toString();
                 message.departement=dataSnapshot.child("departement").getValue().toString();
                 message.klas=dataSnapshot.child("klas").getValue().toString();
                 message.richting=dataSnapshot.child("richting").getValue().toString();
                 //   message.auteur=dataSnapshot.child("auteur").getValue().toString();
-                message.auteur="auteur";
+                message.auteur=dataSnapshot.child("auteur").getValue().toString();
                 //  message.prijs= Double.parseDouble( dataSnapshot.child("prijs").getValue().toString());
 
                 boekenlijst.add(message);
@@ -268,24 +272,62 @@ viewtje=v;
                         final Book book=  new Gson().fromJson(waarde,Book.class);
                         //  boekenlijst.add(book);
 
-                        final   Boeken boekje = new Boeken(  book.getItems().get(0).getVolumeInfo().getImageLinks().getSmallThumbnail(),book.getItems().get(0).getVolumeInfo().getTitle(), ((Spinner) viewtje.findViewById(R.id.richtingen)).getSelectedItem().toString(), ((Spinner) viewtje.findViewById(R.id.klas)).getSelectedItem().toString(),book.getItems().get(0).getVolumeInfo().getPublisher(),book.getItems().get(0).getVolumeInfo().getIndustryIdentifiers().get(0).getIdentifier(),book.getItems().get(0).getVolumeInfo().getPublishedDate(),((Spinner) viewtje.findViewById(R.id.scholen)).getSelectedItem().toString(), FirebaseAuth.getInstance().getUid());
-                        FirebaseDatabase.getInstance().getReference().child("User").child(FirebaseAuth.getInstance().getUid()).child("Verkoop").child(boekje.titel.replace('.','_')).setValue(boekje);
+                       final Boeken test = new Boeken(book.getItems().get(0).getVolumeInfo().getImageLinks().getSmallThumbnail(),book.getItems().get(0).getVolumeInfo().getTitle(),book.getItems().get(0).getVolumeInfo().getAuthors().get(0),book.getItems().get(0).getVolumeInfo().getIndustryIdentifiers().get(0).getIdentifier(),((Spinner) viewtje.findViewById(R.id.scholen)).getSelectedItem().toString(),((Spinner) viewtje.findViewById(R.id.richtingen)).getSelectedItem().toString(),((Spinner) viewtje.findViewById(R.id.klas)).getSelectedItem().toString());
+
+
+                        Toast.makeText(getActivity(), Integer.toString(boekenlijst.size()), Toast.LENGTH_SHORT).show();
+                        FirebaseDatabase.getInstance().getReference().child("User").child(FirebaseAuth.getInstance().getUid()).child("Verkoop").child(test.titel.replace('.','_')).setValue(test);
+                     //   final   Boeken boekje = new Boeken(book.getItems().get(0).getVolumeInfo().getImageLinks().getSmallThumbnail(),book.getItems().get(0).getVolumeInfo().getTitle(), ((Spinner) viewtje.findViewById(R.id.richtingen)).getSelectedItem().toString(), ((Spinner) viewtje.findViewById(R.id.klas)).getSelectedItem().toString(),book.getItems().get(0).getVolumeInfo().getPublisher(),book.getItems().get(0).getVolumeInfo().getIndustryIdentifiers().get(0).getIdentifier(),book.getItems().get(0).getVolumeInfo().getPublishedDate(),((Spinner) viewtje.findViewById(R.id.scholen)).getSelectedItem().toString(), FirebaseAuth.getInstance().getUid(),FirebaseAuth.getInstance().getCurrentUser().getDisplayName());;
                         //    mDatabase.child(((Spinner) findViewById(R.id.scholen)).getSelectedItem().toString()).child(((Spinner) findViewById(R.id.richtingen)).getSelectedItem().toString()).child(((Spinner) findViewById(R.id.klas)).getSelectedItem().toString()).child(book.getItems().get(0).getVolumeInfo().getTitle().replace('.','_')).setValue(boekje);
                         //     mDatabase.child(((Spinner) findViewById(R.id.scholen)).getSelectedItem().toString()).child(((Spinner) findViewById(R.id.richtingen)).getSelectedItem().toString()).child(((Spinner) findViewById(R.id.klas)).getSelectedItem().toString()).child(book.getItems().get(0).getVolumeInfo().getTitle().replace('.','_')).child("userId").child(FirebaseAuth.getInstance().getUid()).setValue(boekje);
-
-//                        Picasso.with(SellPacketActivity.this).load(book.getItems().get(0).getVolumeInfo().getImageLinks().getSmallThumbnail()).into(((ImageView) findViewById(R.id.Cover)));
-                        ((Button) viewtje.findViewById(R.id.verkoopKnop)).setOnClickListener(new View.OnClickListener() {
+                        b.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
 
 
                                 Toast.makeText(getActivity(), "test", Toast.LENGTH_SHORT).show();
-                                String email = ((EditText) view.findViewById(R.id.prijs)).getText().toString();
+                                String email = ((EditText) viewtje.findViewById(R.id.prijs)).getText().toString();
                                 if (TextUtils.isEmpty(email)) {
                                     ((EditText) viewtje.findViewById(R.id.prijs)).setError("Vereist.");
 
                                 } else {
                                     ((EditText) viewtje.findViewById(R.id.prijs)).setError(null);
+
+
+                                    if(boekenlijst.size()==0){
+
+                                        FirebaseDatabase.getInstance().getReference().child("Boeken").child("Afzonderlijk").child("Boeken").child(test.titel.replace('.','_')).setValue(test);
+                                        test.prijs=Double.parseDouble(((EditText) viewtje.findViewById(R.id.prijs)).getText().toString().replace(",","."));
+                                        test.username=FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
+                                        test.userId=FirebaseAuth.getInstance().getCurrentUser().getUid();
+                                        FirebaseDatabase.getInstance().getReference().child("Boeken").child("Afzonderlijk").child("Boeken").child(test.titel.replace('.','_')).child("userID").child(FirebaseAuth.getInstance().getUid()).setValue(test);
+                                        FirebaseDatabase.getInstance().getReference().child("User").child(FirebaseAuth.getInstance().getUid()).child("Verkoop").removeValue();
+                                    }
+                                    if(boekenlijst.size()>0){
+                                        Integer aantal= boekenlijst.size();
+                                        Boeken boekje =new Boeken("https://pbs.twimg.com/profile_images/378800000542961862/5c7765d0b82c5ab3831554e4dcaee38b_400x400.png",book.getItems().get(0).getVolumeInfo().getTitle(),book.getItems().get(0).getVolumeInfo().getAuthors().get(0),book.getItems().get(0).getVolumeInfo().getIndustryIdentifiers().get(0).getIdentifier(),((Spinner) viewtje.findViewById(R.id.scholen)).getSelectedItem().toString(),((Spinner) viewtje.findViewById(R.id.richtingen)).getSelectedItem().toString(),((Spinner) viewtje.findViewById(R.id.klas)).getSelectedItem().toString(),aantal);
+                                        boekje.prijs=Double.parseDouble(((EditText) viewtje.findViewById(R.id.prijs)).getText().toString().replace(",","."));
+                                        boekje.ISBN=null;
+                                        boekje.titel=null;
+                                        boekje.auteur=null;
+                                        boekje.userId=FirebaseAuth.getInstance().getUid();
+                                        FirebaseDatabase.getInstance().getReference().child("Boeken").child("Pakket").child("Boeken").child(FirebaseAuth.getInstance().getUid()).setValue(boekje);
+                                        for(int i=0;i<boekenlijst.size();i++)
+                                        FirebaseDatabase.getInstance().getReference().child("Boeken").child("Pakket").child("Boeken").child(FirebaseAuth.getInstance().getUid()).child("Boeken").child(boekenlijst.get(i).titel).setValue(boekenlijst.get(i));
+                                      //  test.prijs=Double.parseDouble(((EditText) viewtje.findViewById(R.id.prijs)).getText().toString().replace(",","."));
+                                        //test.username=FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
+                                       // test.userId=FirebaseAuth.getInstance().getCurrentUser().getUid();
+                                     //   FirebaseDatabase.getInstance().getReference().child("Boeken").child("Afzonderlijk").child("Boeken").child(test.titel.replace('.','_')).child("userID").child(FirebaseAuth.getInstance().getUid()).setValue(test);
+                                     //   FirebaseDatabase.getInstance().getReference().child("User").child(FirebaseAuth.getInstance().getUid()).child("Verkoop").removeValue();
+                                    }
+
+
+                                    Fragment fragment = new MijnBoekenFragment();
+                                    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                                    fragmentTransaction.replace(R.id.frame, fragment);
+                                    fragmentTransaction.addToBackStack(null);
+                                    fragmentTransaction.commit();
 
                                     //  writeNewUser(((Spinner) findViewById(R.id.scholen)).getSelectedItem().toString(),((Spinner) findViewById(R.id.richtingen)).getSelectedItem().toString(),mAuth.getUid(),book.getItems().get(0).getVolumeInfo().getImageLinks().getSmallThumbnail(),book.getItems().get(0).getVolumeInfo().getTitle(),book.getItems().get(0).getVolumeInfo().getPublisher(),book.getItems().get(0).getVolumeInfo().getPublishedDate(),book.getItems().get(0).getVolumeInfo().getAuthors().get(0),book.getItems().get(0).getVolumeInfo().getIndustryIdentifiers().get(0).getIdentifier(),Double.parseDouble(((EditText) findViewById(R.id.prijs)).getText().toString().replace(",",".")));
                                     // Intent gaNaarBoekenLijst = new Intent(SellActivity.this,RegisterActivity.class);
@@ -297,15 +339,9 @@ viewtje=v;
                                     //      mDatabase.child(((Spinner) findViewById(R.id.scholen)).getSelectedItem().toString()).child(((Spinner) findViewById(R.id.richtingen)).getSelectedItem().toString()).child(((Spinner) findViewById(R.id.klas)).getSelectedItem().toString()).child(book.getItems().get(0).getVolumeInfo().getTitle().replace('.','_')).child("userId").child(FirebaseAuth.getInstance().getUid()).setValue(boekje);
                                     // }
                                     // if (boekenlijst.size()>1){
-                                    Boeken test = new Boeken("https://yt3.ggpht.com/-KVgjC2G7jVc/AAAAAAAAAAI/AAAAAAAAAAA/ghR6nOvOYDk/s900-c-k-no-mo-rj-c0xffffff/photo.jpg","Pakket");
 
-                                    mDatabase.child(((Spinner) viewtje.findViewById(R.id.scholen)).getSelectedItem().toString()).child(((Spinner) viewtje.findViewById(R.id.richtingen)).getSelectedItem().toString()).child(((Spinner) viewtje.findViewById(R.id.klas)).getSelectedItem().toString()).child(test.titel.replace('.','_')).setValue(test);
-                                    //  boekje.prijs=Double.parseDouble(((EditText) findViewById(R.id.prijs)).getText().toString().replace(",","."));
-                                    for(int i=0;i<boekenlijst.size();i++){
-                                        mDatabase.child(((Spinner) viewtje.findViewById(R.id.scholen)).getSelectedItem().toString()).child(((Spinner) viewtje.findViewById(R.id.richtingen)).getSelectedItem().toString()).child(((Spinner) viewtje.findViewById(R.id.klas)).getSelectedItem().toString()).child(test.titel.replace('.','_')).child("userId").child(boekenlijst.get(i).titel).setValue(boekenlijst.get(i));
-
-                                    }
                                 }
+
 
 
                                 // }
@@ -313,7 +349,9 @@ viewtje=v;
                             }
 
                         });
-                        ;
+//                        Picasso.with(SellPacketActivity.this).load(book.getItems().get(0).getVolumeInfo().getImageLinks().getSmallThumbnail()).into(((ImageView) findViewById(R.id.Cover)));
+
+
                     }
                 } catch (InterruptedException e) {
                     e.printStackTrace();

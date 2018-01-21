@@ -17,6 +17,8 @@ public class Boeken {
     public String richting;
     public String departement;
     public String klas;
+    public String username;
+    public Integer aantal;
 
     public Boeken() {
         // Default constructor required for calls to DataSnapshot.getValue(User.class)
@@ -56,9 +58,10 @@ public class Boeken {
         this.uitgeverij=uitgeverij;
 
 
+
     }
 
-    public Boeken(String foto,String titel,String richting,String klas,String uitgeverij,String ISBN,String datum,String departement,String userId) {
+    public Boeken(String foto,String titel,String richting,String klas,String uitgeverij,String ISBN,String datum,String departement,String userId,String username) {
         this.ISBN=ISBN;
         this.departement=departement;
         this.datum=datum;
@@ -69,7 +72,7 @@ public class Boeken {
         this.titel=titel;
         this.userId=userId;
         this.uitgeverij=uitgeverij;
-
+        this.username=username;
 
     }
 
@@ -94,10 +97,39 @@ public class Boeken {
 
     }
 
-    public Boeken(String foto,String titel) {
+    public Boeken(String foto,String titel,String auteur,String ISBN,String departement,String richting,String klas,Integer aantal) {
         this.foto=foto;
         this.titel=titel;
-
+        this.auteur=auteur;
+        this.ISBN=ISBN;
+        this.departement=departement;
+        this.richting=richting;
+        this.klas=klas;
+        this.aantal=aantal;
     }
+    public Boeken(String foto,String titel,String auteur,String ISBN,String departement,String richting,String klas) {
+        this.foto=foto;
+        this.titel=titel;
+        this.auteur=auteur;
+        this.ISBN=ISBN;
+        this.departement=departement;
+        this.richting=richting;
+        this.klas=klas;
+        this.aantal=aantal;
+    }
+
+    public Boeken(String foto,String titel,String auteur,String ISBN,String departement,String richting,String klas,String username,String userId) {
+        this.foto=foto;
+        this.titel=titel;
+        this.auteur=auteur;
+        this.ISBN=ISBN;
+        this.departement=departement;
+        this.richting=richting;
+        this.klas=klas;
+        this.username=username;
+        this.userId=userId;
+    }
+
+
 
 }

@@ -1,27 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     xmlns:tools="http://schemas.android.com/tools"
     android:fitsSystemWindows="true"
     android:orientation="vertical"
-    android:background="@drawable/achtergrond"
     tools:context="com.example.omar.apvalley.LoginActivity">
         >
-
-    <ImageView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="72dp"
-        android:layout_gravity="center_horizontal"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:background="@drawable/achtergrond"
+        android:orientation="horizontal">
 
-        android:layout_marginTop="48dp"
-        android:src="@drawable/boekverse" />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="72dp"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/boekverse" />
+    </LinearLayout>
 
     <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="140dp"
+
             android:paddingLeft="24dp"
             android:paddingRight="24dp">
 
@@ -37,11 +45,10 @@
                 <EditText
                     android:id="@+id/input_email"
                     android:layout_width="match_parent"
-                    android:layout_height="30dp"
-                    android:gravity="center_horizontal"
-                    android:background="@drawable/tekstveld"
+                    android:layout_height="wrap_content"
                     android:inputType="textEmailAddress"
                     android:text="s088342@ap.be"
+                    android:hint="Email"
                     android:textColor="@color/album_title" />
             </android.support.design.widget.TextInputLayout>
 
@@ -58,23 +65,21 @@
                     android:id="@+id/input_password"
                     android:layout_width="match_parent"
                     android:textColor="@color/album_title"
-                    android:layout_height="30dp"
-
-                    android:gravity="center_horizontal"
-                    android:background="@drawable/tekstveld"
+                    android:layout_height="wrap_content"
+                    android:hint="Wachtwoord"
                     android:inputType="textPassword"
                     android:text="appel123" />
             </android.support.design.widget.TextInputLayout>
 
-            <android.support.v7.widget.AppCompatButton
-                android:id="@+id/btn_login"
-                android:layout_width="fill_parent"
-                android:layout_height="35dp"
-                android:layout_marginTop="24dp"
-                android:layout_marginBottom="24dp"
-                android:background="@drawable/login2"
-                android:padding="12dp"
-               />
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btn_login"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/roundedbutton"
+            android:text="Login"
+            android:textColor="@color/accent" />
+        />
 
             <TextView android:id="@+id/link_signup"
                 android:layout_width="fill_parent"
@@ -87,3 +92,4 @@
 
         </LinearLayout>
     </LinearLayout>
+    </ScrollView>

@@ -314,7 +314,7 @@ public class SellPacketActivity extends AppCompatActivity {
                         final Book book=  new Gson().fromJson(waarde,Book.class);
                         //  boekenlijst.add(book);
 
-                      final   Boeken boekje = new Boeken(  book.getItems().get(0).getVolumeInfo().getImageLinks().getSmallThumbnail(),book.getItems().get(0).getVolumeInfo().getTitle(), ((Spinner) findViewById(R.id.richtingen)).getSelectedItem().toString(), ((Spinner) findViewById(R.id.klas)).getSelectedItem().toString(),book.getItems().get(0).getVolumeInfo().getPublisher(),book.getItems().get(0).getVolumeInfo().getIndustryIdentifiers().get(0).getIdentifier(),book.getItems().get(0).getVolumeInfo().getPublishedDate(),((Spinner) findViewById(R.id.scholen)).getSelectedItem().toString(), FirebaseAuth.getInstance().getUid());
+                      final   Boeken boekje = new Boeken(  book.getItems().get(0).getVolumeInfo().getImageLinks().getSmallThumbnail(),book.getItems().get(0).getVolumeInfo().getTitle(), ((Spinner) findViewById(R.id.richtingen)).getSelectedItem().toString(), ((Spinner) findViewById(R.id.klas)).getSelectedItem().toString(),book.getItems().get(0).getVolumeInfo().getPublisher(),book.getItems().get(0).getVolumeInfo().getIndustryIdentifiers().get(0).getIdentifier(),book.getItems().get(0).getVolumeInfo().getPublishedDate(),((Spinner) findViewById(R.id.scholen)).getSelectedItem().toString(), FirebaseAuth.getInstance().getUid(),FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
                         FirebaseDatabase.getInstance().getReference().child("User").child(FirebaseAuth.getInstance().getUid()).child("Verkoop").child(boekje.titel).setValue(boekje);
                     //    mDatabase.child(((Spinner) findViewById(R.id.scholen)).getSelectedItem().toString()).child(((Spinner) findViewById(R.id.richtingen)).getSelectedItem().toString()).child(((Spinner) findViewById(R.id.klas)).getSelectedItem().toString()).child(book.getItems().get(0).getVolumeInfo().getTitle().replace('.','_')).setValue(boekje);
                    //     mDatabase.child(((Spinner) findViewById(R.id.scholen)).getSelectedItem().toString()).child(((Spinner) findViewById(R.id.richtingen)).getSelectedItem().toString()).child(((Spinner) findViewById(R.id.klas)).getSelectedItem().toString()).child(book.getItems().get(0).getVolumeInfo().getTitle().replace('.','_')).child("userId").child(FirebaseAuth.getInstance().getUid()).setValue(boekje);
@@ -341,14 +341,9 @@ public class SellPacketActivity extends AppCompatActivity {
                                   //      mDatabase.child(((Spinner) findViewById(R.id.scholen)).getSelectedItem().toString()).child(((Spinner) findViewById(R.id.richtingen)).getSelectedItem().toString()).child(((Spinner) findViewById(R.id.klas)).getSelectedItem().toString()).child(book.getItems().get(0).getVolumeInfo().getTitle().replace('.','_')).child("userId").child(FirebaseAuth.getInstance().getUid()).setValue(boekje);
                                    // }
                                   // if (boekenlijst.size()>1){
-                                        Boeken test = new Boeken("https://yt3.ggpht.com/-KVgjC2G7jVc/AAAAAAAAAAI/AAAAAAAAAAA/ghR6nOvOYDk/s900-c-k-no-mo-rj-c0xffffff/photo.jpg","Pakket");
+                                   // Boeken test = new Boeken(book.getItems().get(0).getVolumeInfo().getImageLinks().getSmallThumbnail(),book.getItems().get(0).getVolumeInfo().getTitle(),book.getItems().get(0).getVolumeInfo().getAuthors().get(0),book.getItems().get(0).getVolumeInfo().getIndustryIdentifiers().get(0).getIdentifier());
 
-                                        mDatabase.child(((Spinner) findViewById(R.id.scholen)).getSelectedItem().toString()).child(((Spinner) findViewById(R.id.richtingen)).getSelectedItem().toString()).child(((Spinner) findViewById(R.id.klas)).getSelectedItem().toString()).child(test.titel.replace('.','_')).setValue(test);
-                                   //  boekje.prijs=Double.parseDouble(((EditText) findViewById(R.id.prijs)).getText().toString().replace(",","."));
-                                       for(int i=0;i<boekenlijst.size();i++){
-                                           mDatabase.child(((Spinner) findViewById(R.id.scholen)).getSelectedItem().toString()).child(((Spinner) findViewById(R.id.richtingen)).getSelectedItem().toString()).child(((Spinner) findViewById(R.id.klas)).getSelectedItem().toString()).child(test.titel.replace('.','_')).child("userId").child(boekenlijst.get(i).titel).setValue(boekenlijst.get(i));
-
-                                        }
+//                                    FirebaseDatabase.getInstance().getReference().child("Boeken").child("Afzonderlijk").setValue(test);
                                     }
 
 
@@ -379,7 +374,7 @@ public class SellPacketActivity extends AppCompatActivity {
     }
 
 
-    private void writeNewUser(String campus,String richting,String userId, String foto,String titel, String auteur,String uitgeverij,String datum, String ISBN) {
+ /*   private void writeNewUser(String campus,String richting,String userId, String foto,String titel, String auteur,String uitgeverij,String datum, String ISBN) {
         //   Boeken boek = new Boeken(foto,titel,auteur,uitgeverij,datum,ISBN,prijs,userId);
 
         Boeken boek = new Boeken( foto,titel, richting, ((Spinner) findViewById(R.id.klas)).getSelectedItem().toString(),uitgeverij,ISBN,datum,campus, userId);
@@ -389,6 +384,7 @@ public class SellPacketActivity extends AppCompatActivity {
         mDatabase.child(campus).child(richting).child(((Spinner) findViewById(R.id.klas)).getSelectedItem().toString()).child(titel.replace('.','_')).setValue(boek);
         mDatabase.child(campus).child(richting).child(((Spinner) findViewById(R.id.klas)).getSelectedItem().toString()).child(titel.replace('.','_')).child("userId").child(FirebaseAuth.getInstance().getUid()).setValue(boek);
     }
+    */
     public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> implements Filterable {
         private ArrayList<Boeken> mDataset;
         private ArrayList<Boeken> mFilteredList;

@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="scholen_array">
-        <item>Kies uw departement</item>
+        <item>Campus</item>
+        <item>Gezondheid en Welzijn</item>
         <item>Wetenschap en Techniek</item>
+        <item>Koninklijk Academie voor Schone Kunsten</item>
+        <item>Koninklijk Conservatorium Antwerpen</item>
+        <item>Onderwijs en Training</item>
+
+
+
     </string-array>
 </resources>

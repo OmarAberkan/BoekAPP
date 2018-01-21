@@ -55,9 +55,7 @@ import java.util.Iterator;
 import java.util.Locale;
 
 
-public class RegisterActivity extends AppCompatActivity implements
-
-        NavigationView.OnNavigationItemSelectedListener {
+public class RegisterActivity extends AppCompatActivity {
 
     private RecyclerView mRecyclerView;
     //private RecyclerView.Adapter mAdapter;
@@ -98,9 +96,16 @@ public class RegisterActivity extends AppCompatActivity implements
                                 fragmentTransaction1.replace(R.id.frame,fragment1,"FragmentName");
                                 fragmentTransaction1.commit();
                                 return true;
+                            case R.id.history:
+                                setTitle("Bestelhistoriek");
+                                HistoriekFragment fragment5= new HistoriekFragment();
+                                FragmentTransaction fragmentTransaction5 = getSupportFragmentManager().beginTransaction();
+                                fragmentTransaction5.replace(R.id.frame,fragment5,"FragmentName");
+                                fragmentTransaction5.commit();
+                                return true;
                             case R.id.nav_camera:
-                                setTitle("Verkopen");
-                                VerkoopFragment fragment2= new VerkoopFragment();
+                                setTitle("Mijn boeken");
+                                MijnBoekenFragment fragment2= new MijnBoekenFragment();
                                 FragmentTransaction fragmentTransaction2 = getSupportFragmentManager().beginTransaction();
                                 fragmentTransaction2.replace(R.id.frame,fragment2,"FragmentName");
                                 fragmentTransaction2.commit();
@@ -206,17 +211,8 @@ public class RegisterActivity extends AppCompatActivity implements
         setSupportActionBar(toolbar);
 
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        View hView = navigationView.getHeaderView(0);
-        TextView nav_user = (TextView) hView.findViewById(R.id.email);
-        nav_user.setText(getIntent().getStringExtra("email"));
-        navigationView.setNavigationItemSelectedListener(this);
+
 
 
 
@@ -338,87 +334,15 @@ public class RegisterActivity extends AppCompatActivity implements
     }
 */
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.main, menu);
-        MenuItem item = menu.findItem(R.id.search);
-        SearchView view =(SearchView) MenuItemCompat.getActionView(item);
-        search(view);
-
-        return true;
-    }
 
 
 
 
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-       /* if (id == R.id.action_settings) {
-            return true;
-        }
-*/
-        return super.onOptionsItemSelected(item);
-    }
-    private void search(SearchView searchView) {
 
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
 
-                return false;
-            }
 
-            @Override
-            public boolean onQueryTextChange(String newText) {
-
-                mAdapter.getFilter().filter(newText);
-                return true;
-            }
-        });
-    }
-
-    @SuppressWarnings("StatementWithEmptyBody")
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
-
-        if (id == R.id.nav_camera) {
-            Intent goToSell = new Intent(RegisterActivity.this, SellActivity.class);
-            startActivity(goToSell);
-        } else if (id == R.id.nav_boek) {
-            Intent go = new Intent(getApplicationContext(),SellPacketActivity.class);
-            startActivity(go);
-        } else if (id == R.id.nav_slideshnw) {
-            Intent intentje = new Intent(getApplicationContext(),CartActivity.class);
-            startActivity(intentje);
-        } else if (id == R.id.nav_send) {
-            signOut();
-        }
-        //else if (id == R.id.nav_manage) {
-          //  Intent gotohistory = new Intent(getApplicationContext(),HistoriekActivity.class);
-           // startActivity(gotohistory);
-       // }
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
-    }
-
-    private void signOut() {
-        FirebaseAuth.getInstance().signOut();
-        Intent intentje = new Intent(RegisterActivity.this, LoginActivity.class);
-        startActivity(intentje);
-    }
 
 
   /*   @Override
